@@ -26,10 +26,10 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
 
     label->setVisible(false);
     
-	std::string labelText = Mod::get()->getSettingValue<std::string>(pIsMusic ? "music-text" : "sfx-text") + ":";
-	auto newLabel = CCLabelBMFont::create(labelText.c_str(), label->getFntFile());
-	newLabel->setID(pIsMusic ? "music-label"_spr : "sfx-label"_spr);
-	newLabel->setScale(label->getScale());
+    std::string labelText = Mod::get()->getSettingValue<std::string>(pIsMusic ? "music-text" : "sfx-text") + ":";
+    auto newLabel = CCLabelBMFont::create(labelText.c_str(), label->getFntFile());
+    newLabel->setID(pIsMusic ? "music-label"_spr : "sfx-label"_spr);
+    newLabel->setScale(label->getScale());
 
     auto texture = CCTextureCache::sharedTextureCache()->addImage("sliderBar2.png", true);
 
@@ -41,10 +41,10 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
     pInputPtr = TextInput::create(40.0f, "0");
     pInputPtr->setID(pIsMusic ? "music-input"_spr : "sfx-input"_spr);
     pInputPtr->setScale(0.65f);
-    pInputPtr->setFilter(".1234567890");
+    pInputPtr->setFilter("1234567890");
     pInputPtr->setString(getVolumeStr(slider->getValue()));
     pInputPtr->setCallback([=] (const std::string& pStr) {
-        if (pStr.empty() || pStr.ends_with('.')) {
+        if (pStr.empty()) {
             return;
         }
         slider->setValue(std::clamp(utils::numFromString<float>(pStr).unwrapOrDefault(), 0.0f, 100.0f) / 100);
@@ -91,7 +91,7 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
 
     auto muteToggle = CCMenuItemExt::createToggler(
         onSprite,
-		offSprite,
+        offSprite,
         [=] (CCMenuItemToggler* pSender) {
             const auto muted = !Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted");
 
@@ -123,22 +123,14 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
     muteButtonMenu->addChild(muteToggle);
     parent->addChild(muteButtonMenu);
 
-    if (Mod::get()->getSettingValue<bool>("mute-button-on-right")) {
-        muteButtonMenu->setPosition(
-            slider->getPositionX() + ((slider->m_groove->getScaledContentWidth() * slider->getScale()) + 10.0f) / 2,
-            slider->getPositionY()
-        );
-        slider->setPosition(
-            slider->getPositionX() - (muteButtonMenu->getScaledContentWidth() + 10.0f) / 2,
-            slider->getPositionY()
-        );
-    }
-    else {
-        muteButtonMenu->setPosition(
-            labelMenu->getPositionX() + (slider->m_groove->getScaledContentWidth() * slider->getScale()) / 2,
-            labelMenu->getPositionY()
-        );
-    }
+    muteButtonMenu->setPosition(
+        slider->getPositionX() + ((slider->m_groove->getScaledContentWidth() * slider->getScale()) + 10.0f) / 2,
+        slider->getPositionY()
+    );
+    slider->setPosition(
+        slider->getPositionX() - (muteButtonMenu->getScaledContentWidth() + 10.0f) / 2,
+        slider->getPositionY()
+    );
 }
 
 static void tryUpdateMuteButton(CCLayer* pLayer, bool pIsMusic) {
