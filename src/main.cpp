@@ -165,7 +165,7 @@ class $modify(PauseLayer) {
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
             float sliderValue = fields->m_musicSlider->getValue();
-            GameManager::sharedState()->m_musicVolume = sliderValue;
+            GameManager::sharedState()->setGameVariable("0032", sliderValue);
             FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
 
             fields->m_musicInput->setString(getVolumeStr(sliderValue));
@@ -177,7 +177,7 @@ class $modify(PauseLayer) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float sliderValue = fields->m_sfxSlider->getValue();
-            GameManager::sharedState()->m_effectsVolume = sliderValue;
+            GameManager::sharedState()->setGameVariable("0034", sliderValue);
             FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
 
             fields->m_sfxInput->setString(getVolumeStr(sliderValue));
@@ -205,7 +205,7 @@ class $modify(OptionsLayer) {
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
             float sliderValue = fields->m_musicSlider->getValue();
-            GameManager::sharedState()->m_musicVolume = sliderValue;
+            GameManager::sharedState()->setGameVariable("0032", sliderValue);
             FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
 
             fields->m_musicInput->setString(getVolumeStr(sliderValue));
@@ -217,7 +217,7 @@ class $modify(OptionsLayer) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float sliderValue = fields->m_sfxSlider->getValue();
-            GameManager::sharedState()->m_effectsVolume = sliderValue;
+            GameManager::sharedState()->setGameVariable("0034", sliderValue);
             FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
 
             fields->m_sfxInput->setString(getVolumeStr(sliderValue));
