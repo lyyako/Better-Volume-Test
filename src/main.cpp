@@ -26,9 +26,10 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
 
     label->setVisible(false);
     
-    auto newLabel = CCLabelBMFont::create(Mod::get()->getSettingValue<std::string>(pIsMusic ? "music-text" : "sfx-text").c_str(), label->getFntFile());
-    newLabel->setID(pIsMusic ? "music-label"_spr : "sfx-label"_spr);
-    newLabel->setScale(label->getScale());
+	std::string labelText = Mod::get()->getSettingValue<std::string>(pIsMusic ? "music-text" : "sfx-text") + ":";
+	auto newLabel = CCLabelBMFont::create(labelText.c_str(), label->getFntFile());
+	newLabel->setID(pIsMusic ? "music-label"_spr : "sfx-label"_spr);
+	newLabel->setScale(label->getScale());
 
     auto texture = CCTextureCache::sharedTextureCache()->addImage("sliderBar2.png", true);
 
