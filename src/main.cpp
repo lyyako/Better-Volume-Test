@@ -177,7 +177,6 @@ class $modify(PauseLayer) {
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float value = fields->m_sfxSlider->getValue();
             FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg");
             fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
@@ -219,7 +218,6 @@ class $modify(OptionsLayer) {
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float value = fields->m_sfxSlider->getValue();
             FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg");
             fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
