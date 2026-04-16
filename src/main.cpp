@@ -85,14 +85,8 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
     auto onSprite = CCSprite::create("muteon.png"_spr);
 
     if (!offSprite || !onSprite) {
-        geode::log::error("FAILURE: Failed to create one or both mute sprites!");
-        geode::log::error("offSprite is {}", offSprite ? "valid" : "NULL");
-        geode::log::error("onSprite is {}", onSprite ? "valid" : "NULL");
-        
         return;
     }
-
-    geode::log::info("SUCCESS: Both mute sprites were created successfully.");
 
     auto muteToggle = CCMenuItemExt::createToggler(
         offSprite,
@@ -105,6 +99,7 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
                 slider->setValue(0.0f);
                 slider->updateBar();
                 pCallback(slider->m_touchLogic->m_thumb);
+                pSender->toggle(true);
             }
             else {
                 slider->setValue(
@@ -112,7 +107,7 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
                 );
                 slider->updateBar();
                 pCallback(slider->m_touchLogic->m_thumb);
-                pSender->toggle(true);
+                pSender->toggle(false);
             }
             Mod::get()->setSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted", muted);
         }
