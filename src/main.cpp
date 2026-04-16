@@ -177,7 +177,6 @@ class $modify(PauseLayer) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float sliderValue = fields->m_sfxSlider->getValue();
-            GameManager::sharedState()->m_effectsVolume = sliderValue;
             GameManager::sharedState()->setGameVariable("0034", sliderValue);
             FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
 
@@ -218,7 +217,6 @@ class $modify(OptionsLayer) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float sliderValue = fields->m_sfxSlider->getValue();
-            GameManager::sharedState()->m_effectsVolume = sliderValue;
             GameManager::sharedState()->setGameVariable("0034", sliderValue);
             FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
 
