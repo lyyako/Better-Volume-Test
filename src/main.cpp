@@ -89,13 +89,13 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
     }
 
     auto muteToggle = CCMenuItemExt::createToggler(
-        onSprite,
         offSprite,
+        onSprite,
         [=] (CCMenuItemToggler* pSender) {
-            const bool isMuted = pSender->isToggled();
+            const bool isNowMuted = pSender->isToggled();
 
-            if (isMuted) {
-                if (slider->getValue() > 0.0f) {
+            if (isNowMuted) {
+                if (slider->getValue() > 0.f) {
                     Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
                 }
                 slider->setValue(0.0f);
@@ -104,10 +104,10 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
                     Mod::get()->getSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", 1.0f)
                 );
             }
-
+            
             slider->updateBar();
             pCallback(slider->m_touchLogic->m_thumb);
-            Mod::get()->setSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted", isMuted);
+            Mod::get()->setSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted", isNowMuted);
         }
     );
 
