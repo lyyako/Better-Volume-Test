@@ -1,6 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/modify/OptionsLayer.hpp>
+#include <Geode/modify/FMODAudioEngine.hpp>
 
 using namespace geode::prelude;
 
@@ -161,19 +162,25 @@ class $modify(PauseLayer) {
     }
 
     void musicSliderChanged(CCObject* pSender) {
-        PauseLayer::musicSliderChanged(pSender);
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
-            fields->m_musicInput->setString(getVolumeStr(fields->m_musicSlider->getValue()));
+            float sliderValue = fields->m_musicSlider->getValue();
+            GameManager::sharedState()->setMusicVolume(sliderValue);
+            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
+
+            fields->m_musicInput->setString(getVolumeStr(sliderValue));
             tryUpdateMuteButton(this, true);
         }
     }
 
     void sfxSliderChanged(CCObject* pSender) {
-        PauseLayer::sfxSliderChanged(pSender);
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
-            fields->m_sfxInput->setString(getVolumeStr(fields->m_sfxSlider->getValue()));
+            float sliderValue = fields->m_sfxSlider->getValue();
+            GameManager::sharedState()->setEffectsVolume(sliderValue);
+            FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
+
+            fields->m_sfxInput->setString(getVolumeStr(sliderValue));
             tryUpdateMuteButton(this, false);
         }
     }
@@ -195,19 +202,25 @@ class $modify(OptionsLayer) {
     }
 
     void musicSliderChanged(CCObject* pSender) {
-        OptionsLayer::musicSliderChanged(pSender);
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
-            fields->m_musicInput->setString(getVolumeStr(fields->m_musicSlider->getValue()));
+            float sliderValue = fields->m_musicSlider->getValue();
+            GameManager::sharedState()->setMusicVolume(sliderValue);
+            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
+
+            fields->m_musicInput->setString(getVolumeStr(sliderValue));
             tryUpdateMuteButton(this, true);
         }
     }
 
     void sfxSliderChanged(CCObject* pSender) {
-        OptionsLayer::sfxSliderChanged(pSender);
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
-            fields->m_sfxInput->setString(getVolumeStr(fields->m_sfxSlider->getValue()));
+            float sliderValue = fields->m_sfxSlider->getValue();
+            GameManager::sharedState()->setEffectsVolume(sliderValue);
+            FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
+
+            fields->m_sfxInput->setString(getVolumeStr(sliderValue));
             tryUpdateMuteButton(this, false);
         }
     }
