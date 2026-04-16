@@ -89,8 +89,8 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
     }
 
     auto muteToggle = CCMenuItemExt::createToggler(
-        offSprite,
         onSprite,
+        offSprite,
         [=] (CCMenuItemToggler* pSender) {
             const bool isMuted = pSender->isToggled();
 
