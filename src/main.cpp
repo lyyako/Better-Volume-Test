@@ -164,9 +164,9 @@ class $modify(PauseLayer) {
     void musicSliderChanged(CCObject* pSender) {
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
-            float sliderValue = fields->m_musicSlider->getValue();
-            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
-            fields->m_musicInput->setString(getVolumeStr(sliderValue));
+            float value = fields->m_musicSlider->getValue();
+            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(value);
+            fields->m_musicInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, true);
         }
     }
@@ -174,9 +174,10 @@ class $modify(PauseLayer) {
     void sfxSliderChanged(CCObject* pSender) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
-            float sliderValue = fields->m_sfxSlider->getValue();
-            FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
-            fields->m_sfxInput->setString(getVolumeStr(sliderValue));
+            float value = fields->m_sfxSlider->getValue();
+            FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
+            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg", 1.0f, 1.0f, 1.0f);
+            fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
     }
@@ -200,9 +201,13 @@ class $modify(OptionsLayer) {
     void musicSliderChanged(CCObject* pSender) {
         auto fields = m_fields.self();
         if (fields->m_musicInput && fields->m_musicSlider) {
-            float sliderValue = fields->m_musicSlider->getValue();
-            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(sliderValue);
-            fields->m_musicInput->setString(getVolumeStr(sliderValue));
+            float value = fields->m_musicSlider->getValue();
+            float originalVolume = FMODAudioEngine::sharedEngine()->getBackgroundMusicVolume();
+            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(value);
+            if (originalVolume <= 0.f && value > 0.f)
+                GameManager::sharedState()->playMenuMusic();
+
+            fields->m_musicInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, true);
         }
     }
@@ -210,9 +215,10 @@ class $modify(OptionsLayer) {
     void sfxSliderChanged(CCObject* pSender) {
         auto fields = m_fields.self();
         if (fields->m_sfxInput && fields->m_sfxSlider) {
-            float sliderValue = fields->m_sfxSlider->getValue();
-            FMODAudioEngine::sharedEngine()->setEffectsVolume(sliderValue);
-            fields->m_sfxInput->setString(getVolumeStr(sliderValue));
+            float value = fields->m_sfxSlider->getValue();
+            FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
+            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg", 1.0f, 1.0f, 1.0f);
+            fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
     }
