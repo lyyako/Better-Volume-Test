@@ -85,34 +85,36 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
         return;
     }
 
-    auto muteToggle = CCMenuItemExt::createTogglerWithFrameName("GJ_musicOffBtn_001.png", "GJ_musicOnBtn_001.png", 0.5f, [=] (CCMenuItemToggler* pSender) {
-        const auto muted = !Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted");
+    auto muteToggle = CCMenuItemExt::createTogglerWithFrameName(
+        "muteoff.png"_spr,
+        "muteon.png"_spr,
+        0.5f, 
+        [=] (CCMenuItemToggler* pSender) {
+            const auto muted = !Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted");
 
-        if (muted) {
-            Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
+            if (muted) {
+                Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
 
-            slider->setValue(0.0f);
-            slider->updateBar();
+                slider->setValue(0.0f);
+                slider->updateBar();
 
-            pCallback(slider->m_touchLogic->m_thumb);
+                pCallback(slider->m_touchLogic->m_thumb);
+            }
+            else {
+                slider->setValue(
+                    Mod::get()->getSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret")
+                );
+                slider->updateBar();
+                
+                pCallback(slider->m_touchLogic->m_thumb);
+
+                pSender->toggle(true);
+            }
+
+            Mod::get()->setSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted", muted);
         }
-        else {
-            slider->setValue(
-                Mod::get()->getSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret")
-            );
-            slider->updateBar();
-            
-            pCallback(slider->m_touchLogic->m_thumb);
+    );
 
-            // ccmenuitemtoggler toggles its sprite after its callback
-            // and cuz callback toggles it to false, we actually need to toggle it true
-            // again so it updates properly :3
-            pSender->toggle(true);
-        }
-
-        // technically triggers twice but shhhh
-        Mod::get()->setSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted", muted);
-    });
     muteToggle->setID(pIsMusic ? "music-mute-toggle"_spr : "sfx-mute-toggle"_spr);
     muteToggle->toggle(Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted"));
     muteToggle->setPosition(CCPointZero);

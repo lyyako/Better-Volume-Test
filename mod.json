@@ -22,6 +22,11 @@
 	"incompatibilities": {
 		"alphalaneous.volume_input": ">=v1.0.0"
 	},
+	"resources": {
+    "sprites": [
+      "resources/*.png"
+    ]
+    },
 	"settings": {
 		"colored-bars": {
 			"type": "bool",
