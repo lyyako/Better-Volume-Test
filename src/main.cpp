@@ -1,7 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/modify/OptionsLayer.hpp>
-#include <Geode/modify/FMODAudioEngine.hpp>
 
 using namespace geode::prelude;
 
@@ -97,7 +96,9 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
             const auto muted = !Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted");
 
             if (muted) {
-                Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
+                if (slider->getValue() > 0.f) {
+                     Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
+                }
                 slider->setValue(0.0f);
                 slider->updateBar();
                 pCallback(slider->m_touchLogic->m_thumb);
@@ -176,7 +177,7 @@ class $modify(PauseLayer) {
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float value = fields->m_sfxSlider->getValue();
             FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg", 1.0f, 1.0f, 1.0f);
+            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg");
             fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
@@ -204,8 +205,9 @@ class $modify(OptionsLayer) {
             float value = fields->m_musicSlider->getValue();
             float originalVolume = FMODAudioEngine::sharedEngine()->getBackgroundMusicVolume();
             FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(value);
-            if (originalVolume <= 0.f && value > 0.f)
+            if (originalVolume <= 0.f && value > 0.f) {
                 GameManager::sharedState()->playMenuMusic();
+            }
 
             fields->m_musicInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, true);
@@ -217,7 +219,7 @@ class $modify(OptionsLayer) {
         if (fields->m_sfxInput && fields->m_sfxSlider) {
             float value = fields->m_sfxSlider->getValue();
             FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg", 1.0f, 1.0f, 1.0f);
+            FMODAudioEngine::sharedEngine()->playEffect("explode_11.ogg");
             fields->m_sfxInput->setString(getVolumeStr(value));
             tryUpdateMuteButton(this, false);
         }
