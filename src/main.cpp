@@ -173,7 +173,7 @@ class $modify(PauseLayer) {
         }
     }
 
-    #ifndef GEODE_IS_WINDOWS
+#if !defined(GEODE_IS_WINDOWS)
     void sfxSliderChanged(CCObject* pSender) {
         auto slider = typeinfo_cast<SliderThumb*>(pSender);
         if (!slider) return;
@@ -186,21 +186,7 @@ class $modify(PauseLayer) {
             tryUpdateMuteButton(this, false);
         }
     }
-    #endif
-};
-
-    void sfxSliderChanged(CCObject* pSender) {
-        auto slider = typeinfo_cast<SliderThumb*>(pSender);
-        if (!slider) return;
-        auto value = slider->getValue();
-        GameManager::sharedState()->m_sfxVolume = value;
-        FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-        auto fields = m_fields.self();
-        if (fields->m_sfxInput && fields->m_sfxSlider) {
-            fields->m_sfxInput->setString(getVolumeStr(fields->m_sfxSlider->getValue()));
-            tryUpdateMuteButton(this, false);
-        }
-    }
+#endif
 };
 
 class $modify(OptionsLayer) {
