@@ -96,9 +96,7 @@ static void setupSlider(bool pIsMusic, CCNode* pLayer, geode::CopyableFunction<v
             const auto muted = !Mod::get()->getSavedValue<bool>(pIsMusic ? "music-muted" : "sfx-muted");
 
             if (muted) {
-                if (slider->getValue() > 0.f) {
-                     Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
-                }
+                Mod::get()->setSavedValue<float>(pIsMusic ? "music-volume-ret" : "sfx-volume-ret", slider->getValue());
                 slider->setValue(0.0f);
                 slider->updateBar();
                 pCallback(slider->m_touchLogic->m_thumb);
@@ -192,14 +190,14 @@ class $modify(PauseLayer) {
 };
 
     void sfxSliderChanged(CCObject* pSender) {
+        auto slider = typeinfo_cast<SliderThumb*>(pSender);
+        if (!slider) return;
+        auto value = slider->getValue();
+        GameManager::sharedState()->m_sfxVolume = value;
+        FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
         auto fields = m_fields.self();
-        if (fields->m_sfxInput) {
-            auto thumb = geode::cast::typeinfo_cast<SliderThumb*>(pSender);
-            if (!thumb) return;
-            float value = thumb->getValue();
-            FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            GameManager::sharedState()->setGameVariable("0034", value);
-            fields->m_sfxInput->setString(getVolumeStr(value));
+        if (fields->m_sfxInput && fields->m_sfxSlider) {
+            fields->m_sfxInput->setString(getVolumeStr(fields->m_sfxSlider->getValue()));
             tryUpdateMuteButton(this, false);
         }
     }
@@ -221,32 +219,27 @@ class $modify(OptionsLayer) {
     }
 
     void musicSliderChanged(CCObject* pSender) {
+        auto slider = typeinfo_cast<SliderThumb*>(pSender);
+        if (!slider) return;
+        auto value = slider->getValue();
+        GameManager::sharedState()->m_bgVolume = value;
+        FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(value);
         auto fields = m_fields.self();
-        if (fields->m_musicInput) {
-            auto thumb = geode::cast::typeinfo_cast<SliderThumb*>(pSender);
-            if (!thumb) return;
-            float value = thumb->getValue();
-            float originalVolume = FMODAudioEngine::sharedEngine()->getBackgroundMusicVolume();
-            FMODAudioEngine::sharedEngine()->setBackgroundMusicVolume(value);
-            GameManager::sharedState()->setGameVariable("0032", value);
-            if (originalVolume <= 0.f && value > 0.f) {
-                GameManager::sharedState()->playMenuMusic();
-            }
-
-            fields->m_musicInput->setString(getVolumeStr(value));
+        if (fields->m_musicInput && fields->m_musicSlider) {
+            fields->m_musicInput->setString(getVolumeStr(fields->m_musicSlider->getValue()));
             tryUpdateMuteButton(this, true);
         }
     }
 
     void sfxSliderChanged(CCObject* pSender) {
+        auto slider = typeinfo_cast<SliderThumb*>(pSender);
+        if (!slider) return;
+        auto value = slider->getValue();
+        GameManager::sharedState()->m_sfxVolume = value;
+        FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
         auto fields = m_fields.self();
-        if (fields->m_sfxInput) {
-            auto thumb = geode::cast::typeinfo_cast<SliderThumb*>(pSender);
-            if (!thumb) return;
-            float value = thumb->getValue();
-            FMODAudioEngine::sharedEngine()->setEffectsVolume(value);
-            GameManager::sharedState()->setGameVariable("0034", value);
-            fields->m_sfxInput->setString(getVolumeStr(value));
+        if (fields->m_sfxInput && fields->m_sfxSlider) {
+            fields->m_sfxInput->setString(getVolumeStr(fields->m_sfxSlider->getValue()));
             tryUpdateMuteButton(this, false);
         }
     }
